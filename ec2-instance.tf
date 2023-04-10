@@ -1,14 +1,14 @@
 provider "aws" {
-  region     = "ap-south-1"
+  region     = var.region
 }
 resource "aws_instance" "server" {
-  ami           = "ami-09f7fbc41963e146f"
-  instance_type = "t2.micro"
-  subnet_id = "subnet-08856ec71651ae342"
-  security_groups = ["sg-053a4ca5e1ccb8215"]
+  count = 2
+  ami           = var.ami
+  instance_type = var.instance_type
+  subnet_id = "${element(var.subnet,count.index)}"
   key_name = "sridarKPMBI"
 
   tags = {
-    Name = "terraform-server"
+    Name = "terraform-${count.index+1}"
   }
 }
